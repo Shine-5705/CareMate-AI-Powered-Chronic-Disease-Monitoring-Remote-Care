@@ -9,7 +9,7 @@ CareMate is a modern, agentic healthcare solution purpose‑built for chronic di
 | Resource       | Link                                                                                               |
 | -------------- | -------------------------------------------------------------------------------------------------- |
 | **Live App**   | [https://caremate-youragenticdoctor.netlify.app/](https://caremate-youragenticdoctor.netlify.app/) |
-| **Demo Video** | [Watch the walkthrough on YouTube](https://youtu.be/YOUR_DEMO_VIDEO_ID)                            |
+| **Demo Video** | [Watch the walkthrough on YouTube](https://youtu.be/GuHaVxKIhnc)                            |
 
 <p align="center">
   <img src="https://github.com/Shine-5705/CareMate-AI-Powered-Chronic-Disease-Monitoring-Remote-Care/blob/main/asset/WebUI.png" alt="CareMate UI Screenshot" width="700"/>
