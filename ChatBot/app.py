@@ -6,12 +6,11 @@ from translate import translate_text, detect_language
 app = Flask(__name__)
 CORS(app)
 
-# Replace this with your actual Groq API key
-GROQ_API_KEY = ""
-GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_API_KEY = "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"
 MODEL_NAME = "llama3-70b-8192"
+GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
 
-def call_mixtral(prompt):
+def call_llama(prompt):
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
@@ -23,10 +22,14 @@ def call_mixtral(prompt):
             {
                 "role": "system",
                 "content": (
-                    "You are CareMate, a multilingual AI health assistant for India. "
-                    "Your goal is to help users understand their symptoms in simple terms, "
-                    "suggest safe home remedies when appropriate, and tell them when to consult a doctor. "
-                    "Respond in plain, easy-to-understand language."
+                    "You are CareMate, an experienced and multilingual AI health assistant built for India, focused on early symptom triage and wellness advice.\n\n"
+                    "Your personality is calm, kind, and helpful—like a local doctor. You ask relevant follow-up questions before suggesting anything. "
+                    "You never give direct prescriptions or diagnoses. You provide safe, general advice based on symptoms only.\n\n"
+                    "Start by asking the user for more detail: What other symptoms do they have? When did it start? Are they feeling tired, or having trouble breathing?\n\n"
+                    "Then, based on common conditions, share basic remedies (like hydration, rest, steam inhalation, etc.) only if it's safe.\n\n"
+                    "You must clearly explain when a symptom sounds serious and advise the user to contact a real doctor. Be especially careful with symptoms like chest pain, high fever, shortness of breath, dizziness, or pre-existing conditions.\n\n"
+                    "Never guess a disease name. Never prescribe any medicine. Speak clearly in short, friendly paragraphs. Avoid medical jargon.\n\n"
+                    "Always end by asking: 'Would you like me to keep checking your symptoms or connect you to a doctor?'"
                 )
             },
             {
@@ -40,18 +43,15 @@ def call_mixtral(prompt):
     }
 
     response = requests.post(GROQ_ENDPOINT, headers=headers, json=payload)
+    result = response.json()
 
-    try:
-        result = response.json()
-        print("Groq API raw response:", result)  # <-- DEBUG LINE
-
-        if "choices" in result and result["choices"]:
-            return result["choices"][0]["message"]["content"].strip()
-        else:
-            return "Sorry, I couldn't process that. Please try again later."
-
-    except Exception as e:
-        return f"Error parsing response: {str(e)}"
+    if "choices" in result and result["choices"]:
+        return result["choices"][0]["message"]["content"].strip()
+    elif "error" in result:
+        print("Groq API error:", result["error"])
+        return "Sorry, there was a problem with the AI model. Please try again later."
+    else:
+        return "Sorry, I couldn't process that. Please try again later."
 
 @app.route("/ask_health", methods=["POST"])
 def ask_health():
@@ -61,25 +61,27 @@ def ask_health():
     if not user_input:
         return jsonify({"error": "Message cannot be empty"}), 400
 
-    # Detect language
-    lang = detect_language(user_input)
-    
-    # Translate to English for LLM
-    translated_input = translate_text(user_input, target_lang='en')
-
-    # Generate response
     try:
-        english_response = call_mixtral(translated_input)
+        # Detect language
+        lang = detect_language(user_input)
+
+        # Translate to English for model input
+        translated_input = translate_text(user_input, target_lang='en')
+
+        # Get AI reply in English
+        english_reply = call_llama(translated_input)
+
+        # Translate back to original language
+        localized_reply = translate_text(english_reply, target_lang=lang)
+
+        return jsonify({
+            "reply": localized_reply,
+            "language": lang
+        })
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-    # Translate back to original language
-    localized_reply = translate_text(english_response, target_lang=lang)
-
-    return jsonify({
-        "reply": localized_reply,
-        "language": lang
-    })
+        print("Exception:", e)
+        return jsonify({"error": "Internal server error"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -17,6 +17,7 @@ import {
   Play
 } from 'lucide-react';
 import Button from '../common/Button';
+import { sendMessageToAI, transcribeAudio } from '../../api/ai-health-assistant';
 
 interface Message {
   id: string;
@@ -153,29 +154,20 @@ const AIHealthAssistant: React.FC<AIHealthAssistantProps> = ({ isOpen, onToggle 
     setIsLoading(true);
 
     try {
-      // Call your backend API with Grok integration
-      const response = await fetch('http://localhost:5000/api/health-chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: inputMessage,
-          language: selectedLanguage,
-          chatHistory: messages,
-        }),
+      // Use the updated API function
+      const data = await sendMessageToAI({
+        message: inputMessage,
+        language: selectedLanguage,
+        chatHistory: messages.map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }))
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-
-      const data = await response.json();
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response || getErrorMessage(selectedLanguage),
+        content: data.response,
         timestamp: new Date(),
         language: selectedLanguage,
       };
@@ -294,20 +286,8 @@ const AIHealthAssistant: React.FC<AIHealthAssistantProps> = ({ isOpen, onToggle 
   };
 
   const transcribeAudio = async (audioBlob: Blob): Promise<string> => {
-    const formData = new FormData();
-    formData.append('audio', audioBlob, 'audio.webm');
-    
-    const response = await fetch('http://localhost:5000/api/transcribe', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Transcription failed');
-    }
-
-    const data = await response.json();
-    return data.transcript || '';
+    // Use the updated transcription API
+    return await transcribeAudio(audioBlob, selectedLanguage);
   };
 
   const speakText = (text: string) => {

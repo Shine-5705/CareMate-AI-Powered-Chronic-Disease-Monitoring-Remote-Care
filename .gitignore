@@ -37,7 +37,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 .ChatBot\.env
-
+.ChatbotVoice\.env
 # Unit test / coverage reports
 htmlcov/
 .tox/
