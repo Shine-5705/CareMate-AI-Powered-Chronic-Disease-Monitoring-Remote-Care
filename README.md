@@ -12,7 +12,7 @@ CareMate is a modern, agentic healthcare solution purpose‑built for chronic di
 | **Demo Video** | [Watch the walkthrough on YouTube](https://youtu.be/YOUR_DEMO_VIDEO_ID)                            |
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="CareMate UI Screenshot" width="700"/>
+  <img src="[docs/screenshot.png](https://github.com/Shine-5705/CareMate-AI-Powered-Chronic-Disease-Monitoring-Remote-Care/blob/main/asset/WebUI.png)" alt="CareMate UI Screenshot" width="700"/>
 </p>
 
 > *Add your own high‑resolution screenshot in `docs/screenshot.png` or update the path above.*
