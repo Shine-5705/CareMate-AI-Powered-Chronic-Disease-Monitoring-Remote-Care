@@ -1,3 +1,7 @@
+MCP\.env
+ChatBot\.env
+ChatbotVoice\.env
+project\.env
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
