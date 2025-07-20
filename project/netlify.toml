@@ -1,0 +1,28 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  REACT_APP_GROK_API_KEY = "REACT_APP_GROK_API_KEY"
+  REACT_APP_GROK_API_URL = "https://api.groq.com/openai/v1"
+  REACT_APP_ASSEMBLY_AI_API_KEY = "REACT_APP_ASSEMBLY_AI_API_KEY"
+  REACT_APP_ASSEMBLY_AI_API_URL = "https://api.assemblyai.com/v2"
+  REACT_APP_GEMINI_API_KEY = "REACT_APP_GEMINI_API_KEY"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

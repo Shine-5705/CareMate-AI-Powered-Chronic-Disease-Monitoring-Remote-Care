@@ -9,6 +9,15 @@ from dotenv import load_dotenv
 import tempfile
 import datetime
 
+# Import skin analysis module
+try:
+    from skin_analysis import analyze_skin_with_gemini, generate_audio_response
+    SKIN_ANALYSIS_AVAILABLE = True
+    print("✅ Skin analysis module loaded successfully")
+except ImportError as e:
+    print(f"⚠️ Skin analysis module not available: {e}")
+    SKIN_ANALYSIS_AVAILABLE = False
+
 # Load environment variables
 load_dotenv()
 
@@ -346,6 +355,94 @@ def transcribe_audio():
         print(f"❌ Transcription error: {error_msg}")
         return jsonify({
             'error': f'Transcription failed: {error_msg}',
+            'success': False
+        }), 500
+
+@app.route('/api/analyze-skin', methods=['POST'])
+def analyze_skin():
+    """Enhanced skin analysis endpoint using Google Gemini AI"""
+    try:
+        print("🔍 Received skin analysis request")
+        
+        if not SKIN_ANALYSIS_AVAILABLE:
+            return jsonify({
+                'error': 'Skin analysis service not available',
+                'success': False
+            }), 503
+        
+        # Check if image is provided
+        if 'image' not in request.files and 'imageData' not in request.json:
+            return jsonify({
+                'error': 'No image provided',
+                'success': False
+            }), 400
+        
+        # Get user language preference
+        user_language = request.form.get('language', 'en')
+        if request.json:
+            user_language = request.json.get('language', 'en')
+        
+        print(f"🌐 User language: {user_language}")
+        
+        # Handle image data
+        image_data = None
+        if 'image' in request.files:
+            # Handle file upload
+            image_file = request.files['image']
+            if image_file.filename == '':
+                return jsonify({
+                    'error': 'No image file selected',
+                    'success': False
+                }), 400
+            
+            image_data = image_file.read()
+            print(f"📁 Image file uploaded: {len(image_data)} bytes")
+            
+        elif request.json and 'imageData' in request.json:
+            # Handle base64 image data
+            image_data = request.json['imageData']
+            print("📷 Base64 image data received")
+        
+        if not image_data:
+            return jsonify({
+                'error': 'Invalid image data',
+                'success': False
+            }), 400
+        
+        # Analyze with Gemini AI
+        print("🧠 Starting Gemini AI analysis...")
+        analysis_result = analyze_skin_with_gemini(image_data, user_language)
+        
+        # Generate audio response if requested
+        generate_audio = request.form.get('generateAudio', 'false').lower() == 'true'
+        if request.json:
+            generate_audio = request.json.get('generateAudio', False)
+        
+        audio_response = None
+        if generate_audio:
+            print("🔊 Generating audio response...")
+            audio_response = generate_audio_response(analysis_result, user_language)
+        
+        print("✅ Skin analysis completed successfully")
+        
+        response_data = {
+            'analysis': analysis_result,
+            'language': user_language,
+            'success': True,
+            'timestamp': datetime.datetime.now().isoformat()
+        }
+        
+        if audio_response:
+            response_data['audio'] = audio_response
+        
+        return jsonify(response_data)
+        
+    except Exception as e:
+        error_msg = str(e)
+        print(f"❌ Skin analysis error: {error_msg}")
+        
+        return jsonify({
+            'error': f'Skin analysis failed: {error_msg}',
             'success': False
         }), 500
 

@@ -19,3 +19,13 @@ pyttsx3
 pydub
 sounddevice 
 numpy 
+#skin analysis  
+timm 
+accelerate
+google-generativeai
+torchvision 
+torchaudio  
+scipy 
+librosa 
+noisereduce 
+joblib 

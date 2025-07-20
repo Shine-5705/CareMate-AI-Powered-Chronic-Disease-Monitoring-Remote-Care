@@ -42,7 +42,9 @@ export interface LanguageDetectionResponse {
 export const sendMessageToAI = async (request: AIHealthAssistantRequest): Promise<AIHealthAssistantResponse> => {
   try {
     // Call Groq API directly from frontend
-    const grokApiKey = import.meta.env.VITE_GROK_API_KEY || process.env.REACT_APP_GROK_API_KEY;
+    const grokApiKey = import.meta.env.VITE_GROK_API_KEY || 
+                      process.env.REACT_APP_GROK_API_KEY || 
+                      'GROQ_API_KEY';
     
     if (!grokApiKey) {
       throw new Error('Groq API key not configured');
@@ -199,7 +201,9 @@ export const translateText = async (request: TranslationRequest): Promise<Transl
 // Voice transcription using AssemblyAI
 export const transcribeAudio = async (audioBlob: Blob, language: string = 'hi'): Promise<string> => {
   try {
-    const assemblyAiKey = import.meta.env.VITE_ASSEMBLY_AI_API_KEY || process.env.REACT_APP_ASSEMBLY_AI_API_KEY;
+    const assemblyAiKey = import.meta.env.VITE_ASSEMBLY_AI_API_KEY || 
+                         process.env.REACT_APP_ASSEMBLY_AI_API_KEY || 
+                         'ASSEMBLY_AI_API_KEY';
     
     if (!assemblyAiKey) {
       throw new Error('AssemblyAI API key not configured');
@@ -375,7 +379,7 @@ export const speakText = async (text: string, language: string = 'hi'): Promise<
     };
     
     utterance.lang = langMap[language] || 'hi-IN';
-    utterance.rate = 0.9;
+    utterance.rate = 0.8; // Slower rate for medical content
     utterance.pitch = 1;
     utterance.volume = 1;
 

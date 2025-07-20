@@ -1,7 +1,14 @@
 MCP\.env
-ChatBot\.env
 ChatbotVoice\.env
 project\.env
+skinAnalyis\.env
+CoughAnalysis\.env
+PersonalizedHealthGame\.env
+project\backend\.env
+project\.env.production
+project\netlify-setup-instructions.md
+project\netlify.toml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

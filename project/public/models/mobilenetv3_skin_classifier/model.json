@@ -1,0 +1,135 @@
+{
+  "format": "layers-model",
+  "generatedBy": "TensorFlow.js tfjs-layers v4.15.0",
+  "convertedBy": "TensorFlow.js Converter v4.15.0",
+  "modelTopology": {
+    "keras_version": "2.13.0",
+    "backend": "tensorflow",
+    "model_config": {
+      "class_name": "Functional",
+      "config": {
+        "name": "mobilenetv3_skin_classifier",
+        "layers": [
+          {
+            "class_name": "InputLayer",
+            "config": {
+              "batch_input_shape": [null, 224, 224, 3],
+              "dtype": "float32",
+              "sparse": false,
+              "ragged": false,
+              "name": "input_1"
+            },
+            "name": "input_1",
+            "inbound_nodes": []
+          },
+          {
+            "class_name": "Rescaling",
+            "config": {
+              "name": "rescaling",
+              "trainable": true,
+              "dtype": "float32",
+              "scale": 0.007843137718737125,
+              "offset": -1.0
+            },
+            "name": "rescaling",
+            "inbound_nodes": [[["input_1", 0, 0, {}]]]
+          },
+          {
+            "class_name": "TFOpLambda",
+            "config": {
+              "name": "mobilenetv3large",
+              "trainable": false,
+              "dtype": "float32",
+              "function": "mobilenet_v3.MobileNetV3Large"
+            },
+            "name": "mobilenetv3large",
+            "inbound_nodes": [[["rescaling", 0, 0, {}]]]
+          },
+          {
+            "class_name": "GlobalAveragePooling2D",
+            "config": {
+              "name": "global_average_pooling2d",
+              "trainable": true,
+              "dtype": "float32",
+              "data_format": "channels_last",
+              "keepdims": false
+            },
+            "name": "global_average_pooling2d",
+            "inbound_nodes": [[["mobilenetv3large", 0, 0, {}]]]
+          },
+          {
+            "class_name": "Dropout",
+            "config": {
+              "name": "dropout",
+              "trainable": true,
+              "dtype": "float32",
+              "rate": 0.2,
+              "noise_shape": null,
+              "seed": null
+            },
+            "name": "dropout",
+            "inbound_nodes": [[["global_average_pooling2d", 0, 0, {}]]]
+          },
+          {
+            "class_name": "Dense",
+            "config": {
+              "name": "predictions",
+              "trainable": true,
+              "dtype": "float32",
+              "units": 34,
+              "activation": "softmax",
+              "use_bias": true,
+              "kernel_initializer": {
+                "class_name": "GlorotUniform",
+                "config": {"seed": null}
+              },
+              "bias_initializer": {
+                "class_name": "Zeros",
+                "config": {}
+              },
+              "kernel_regularizer": null,
+              "bias_regularizer": null,
+              "activity_regularizer": null,
+              "kernel_constraint": null,
+              "bias_constraint": null
+            },
+            "name": "predictions",
+            "inbound_nodes": [[["dropout", 0, 0, {}]]]
+          }
+        ],
+        "input_layers": [["input_1", 0, 0]],
+        "output_layers": [["predictions", 0, 0]]
+      }
+    },
+    "training_config": {
+      "loss": "categorical_crossentropy",
+      "metrics": [["accuracy"]],
+      "optimizer_config": {
+        "class_name": "Adam",
+        "config": {
+          "name": "Adam",
+          "learning_rate": 0.0001,
+          "decay": 0.0,
+          "beta_1": 0.9,
+          "beta_2": 0.999,
+          "epsilon": 1e-07,
+          "amsgrad": false
+        }
+      }
+    }
+  },
+  "weightsManifest": [
+    {
+      "paths": ["group1-shard1of1.bin"],
+      "weights": [
+        {"name": "mobilenetv3large/Conv/weights", "shape": [3, 3, 3, 16], "dtype": "float32"},
+        {"name": "mobilenetv3large/Conv/BatchNorm/gamma", "shape": [16], "dtype": "float32"},
+        {"name": "mobilenetv3large/Conv/BatchNorm/beta", "shape": [16], "dtype": "float32"},
+        {"name": "mobilenetv3large/Conv/BatchNorm/moving_mean", "shape": [16], "dtype": "float32"},
+        {"name": "mobilenetv3large/Conv/BatchNorm/moving_variance", "shape": [16], "dtype": "float32"},
+        {"name": "predictions/kernel", "shape": [960, 34], "dtype": "float32"},
+        {"name": "predictions/bias", "shape": [34], "dtype": "float32"}
+      ]
+    }
+  ]
+}

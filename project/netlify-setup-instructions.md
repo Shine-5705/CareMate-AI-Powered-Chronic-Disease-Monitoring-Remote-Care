@@ -1,7 +1,7 @@
 # Netlify Environment Variables Setup
 
 ## Your Deployed Site
-🌐 **Live URL**: https://dazzling-khapse-9ef20d.netlify.app
+🌐 **Live URL**: https://caremate0507.netlify.app/
 🔗 **Claim URL**: https://app.netlify.com/claim?utm_source=bolt#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRfaWQiOiI1aDZmZEstVktNTXZuRjNiRlZUaktfU2JKVGgzNlNfMjJheTlpTHhVX0Q4Iiwic2Vzc2lvbl9pZCI6IjUyNDQ4ODEwOjYxMTg0NDQiLCJpYXQiOjE3NTI1MzAzMjl9.fO6tmNox5pOQfnaAq5iUdM5i9jZqqvKglkJyBr__rLU
 
 ## Steps to Configure API Keys
@@ -18,9 +18,9 @@
 
 #### Required Environment Variables:
 ```
-REACT_APP_GROK_API_KEY = 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
+REACT_APP_GROK_API_KEY = REACT_APP_GROK_API_KEY
 REACT_APP_GROK_API_URL = https://api.groq.com/openai/v1
-REACT_APP_ASSEMBLY_AI_API_KEY = d60a6180a57a4e58800ea75e6d390d8d
+REACT_APP_ASSEMBLY_AI_API_KEY = ASSEMBLY_AI_API_KEY
 REACT_APP_ASSEMBLY_AI_API_URL = https://api.assemblyai.com/v2
 ```
 

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Menu, X, BellIcon, MessageSquare, User, Bot } from 'lucide-react';
+import { Menu, X, BellIcon, MessageSquare, User, Bot, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useAIHealthAssistant } from '../ai/AIHealthAssistantProvider';
 import { Link } from 'react-router-dom';
+import SkinAnalysis from '../ai/SkinAnalysis';
+import CoughAnalysis from '../ai/CoughAnalysis';
+import HealthFitnessGame from '../game/HealthFitnessGame';
 
 const Header: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -10,6 +13,9 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isSkinAnalysisOpen, setIsSkinAnalysisOpen] = useState(false);
+  const [isCoughAnalysisOpen, setIsCoughAnalysisOpen] = useState(false);
+  const [isHealthGameOpen, setIsHealthGameOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -130,6 +136,33 @@ const Header: React.FC = () => {
                 <Bot className="h-5 w-5" />
               </button>
               
+              {/* Skin Analysis */}
+              <button 
+                onClick={() => setIsSkinAnalysisOpen(true)}
+                className="p-1.5 text-neutral-700 hover:bg-neutral-100 rounded-full transition-colors"
+                title="AI Skin Analysis"
+              >
+                <Camera className="h-5 w-5" />
+              </button>
+              
+              {/* Cough Analysis */}
+              <button 
+                onClick={() => setIsCoughAnalysisOpen(true)}
+                className="p-1.5 text-neutral-700 hover:bg-neutral-100 rounded-full transition-colors"
+                title="Cough & Respiratory Analysis"
+              >
+                🫁
+              </button>
+              
+              {/* Health & Fitness Game */}
+              <button 
+                onClick={() => setIsHealthGameOpen(true)}
+                className="p-1.5 text-neutral-700 hover:bg-neutral-100 rounded-full transition-colors"
+                title="EcoFit: Animal Rescue Adventure"
+              >
+                🌍
+              </button>
+              
               {/* Profile dropdown */}
               <div className="relative">
                 <button 
@@ -203,6 +236,24 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Skin Analysis Modal */}
+      <SkinAnalysis 
+        isOpen={isSkinAnalysisOpen} 
+        onClose={() => setIsSkinAnalysisOpen(false)} 
+      />
+
+      {/* Cough Analysis Modal */}
+      <CoughAnalysis 
+        isOpen={isCoughAnalysisOpen} 
+        onClose={() => setIsCoughAnalysisOpen(false)} 
+      />
+
+      {/* Health & Fitness Game Modal */}
+      <HealthFitnessGame 
+        isOpen={isHealthGameOpen} 
+        onClose={() => setIsHealthGameOpen(false)} 
+      />
 
       {/* Mobile menu */}
       {isMenuOpen && (
@@ -290,6 +341,36 @@ const Header: React.FC = () => {
                   className="block w-full text-left px-3 py-2 rounded-md font-medium text-neutral-700 hover:bg-neutral-100"
                 >
                   AI Health Assistant
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    setIsSkinAnalysisOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 rounded-md font-medium text-neutral-700 hover:bg-neutral-100"
+                >
+                  AI Skin Analysis
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    setIsCoughAnalysisOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 rounded-md font-medium text-neutral-700 hover:bg-neutral-100"
+                >
+                  Cough Analysis
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    setIsHealthGameOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 rounded-md font-medium text-neutral-700 hover:bg-neutral-100"
+                >
+                  EcoFit Adventure
                 </button>
                 
                 <Link 
