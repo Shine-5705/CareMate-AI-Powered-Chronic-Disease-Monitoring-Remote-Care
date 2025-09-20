@@ -118,7 +118,7 @@ Ensure all exercises are:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           {
             role: 'system',
@@ -552,7 +552,7 @@ Provide insights as a simple list of 5 actionable recommendations that relate to
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           {
             role: 'system',
