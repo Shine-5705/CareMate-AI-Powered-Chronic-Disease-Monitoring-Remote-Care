@@ -210,7 +210,7 @@ Respond ONLY in ${langName} language with practical, culturally appropriate advi
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [
           {
             role: 'system',
